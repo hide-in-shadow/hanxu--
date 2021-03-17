@@ -101,9 +101,40 @@
 //   actions
 // }
 
+import { getToken, setToken, removeToken } from '@/utils/auth'
+import { login } from '@/api/user'
+
+// 状态
+const state = {
+  token: getToken()
+}
+
+// 修改状态
+const mutations = {
+  setToken(state, token) {
+    state.token = token // 设置token
+    setToken(token) // vuex和 缓存数据的同步
+  },
+  removeToken(state) {
+    state.token = null // 删除vuex的token
+    removeToken() // 先清除 vuex  再清除缓存 vuex和 缓存数据的同步
+  }
+}
+
+// 执行异步
+const actions = {
+  // 定义login action  也需要参数 调用action时 传递过来的参数
+  async login(context, formData) {
+    // request 拦截数据 加工后 返回 的 数据 返回数据就说明调用成功
+    const data = await login(formData)
+    // 返回数据就说明调用成功 actions 修改state 必须通过mutations
+    context.commit('setToken', data)
+  }
+}
+
 export default {
   namespaced: true,
-  state: {},
-  mutations: {},
-  actions: {}
+  state,
+  mutations,
+  actions
 }
