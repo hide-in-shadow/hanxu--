@@ -92,13 +92,16 @@ export default {
     },
     // 点击登录事件
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+      this.$refs.loginForm.validate(async valid => {
         if (valid) {
           this.loading = true
           // 调用 vuex 里的 异步函数
           try {
-            this.$store.dispatch('user/login', this.loginForm)
+            // 这里加 await 为了 token 获取完成后 再跳转
+            await this.$store.dispatch('user/login', this.loginForm)
+            console.log(1111111)
             this.$router.push('/')
+            console.log(222222)
           } catch (error) {
             console.log('返回错误')
           }

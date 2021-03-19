@@ -101,12 +101,13 @@
 //   actions
 // }
 
-import { getToken, setToken, removeToken } from '@/utils/auth'
-import { login } from '@/api/user'
+import { getToken, setToken, removeToken, setTimeStamp } from '@/utils/auth'
+import { login, getUserInfo, getUserDetailById } from '@/api/user'
 
 // 状态
 const state = {
-  token: getToken()
+  token: getToken(),
+  userInfo: {} // 用户资料
 }
 
 // 修改状态
@@ -118,6 +119,14 @@ const mutations = {
   removeToken(state) {
     state.token = null // 删除vuex的token
     removeToken() // 先清除 vuex  再清除缓存 vuex和 缓存数据的同步
+  },
+  // 获取设置用户资料
+  setUserInfo(state, userInfo) {
+    state.userInfo = userInfo
+  },
+  // 删除用户资料
+  removeUserInfo(state) {
+    state.userInfo = {}
   }
 }
 
@@ -129,6 +138,21 @@ const actions = {
     const data = await login(formData)
     // 返回数据就说明调用成功 actions 修改state 必须通过mutations
     context.commit('setToken', data)
+    // 接口调用成功 写入时间戳
+    setTimeStamp() // 将当前的最新时间写入缓存
+  },
+  // 获取用户资料action
+  async getUserInfo(context) {
+    const result = await getUserInfo() // 获取用户资料 同时根据用户id获取头像
+    const baseInfo = await getUserDetailById(result.userId) // 为了获取头像
+    const baseResult = { ...result, ...baseInfo } // 将两个接口结果合并
+    context.commit('setUserInfo', baseResult) // 将个人信息设置到用户的vuex数据中
+    return baseResult // 这里为什么要返回 为后面埋下伏笔
+  },
+  // 用户登出
+  logout(context) {
+    context.commit('removeToken') // 删除token
+    context.commit('removeUserInfo') // 删除用户信息资料
   }
 }
 
