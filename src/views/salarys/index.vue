@@ -1,5 +1,11 @@
 <template>
-  <div>工资页面</div>
+  <div class="dashboard-container">
+    <div class="app-container">
+      <h2>
+        工资页面
+      </h2>
+    </div>
+  </div>
 </template>
 
 <script>

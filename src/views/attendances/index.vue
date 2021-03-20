@@ -1,5 +1,11 @@
 <template>
-  <div>考勤页面</div>
+  <div class="dashboard-container">
+    <div class="app-container">
+      <h2>
+        考勤页面
+      </h2>
+    </div>
+  </div>
 </template>
 
 <script>

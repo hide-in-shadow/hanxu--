@@ -1,5 +1,11 @@
 <template>
-  <div>公司设置页面</div>
+  <div class="dashboard-container">
+    <div class="app-container">
+      <h2>
+        公司设置页面
+      </h2>
+    </div>
+  </div>
 </template>
 
 <script>

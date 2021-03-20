@@ -1,7 +1,13 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-
+    <el-form
+      ref="loginForm"
+      :model="loginForm"
+      :rules="loginRules"
+      class="login-form"
+      auto-complete="on"
+      label-position="left"
+    >
       <div class="title-container">
         <h3 class="title">
           <img src="@/assets/common/login-logo.png" alt="">
@@ -12,26 +18,51 @@
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input ref="mobile" v-model="loginForm.mobile" placeholder="请输入用户名" name="mobile" type="text" tabindex="1" auto-complete="on" />
+        <el-input
+          ref="mobile"
+          v-model="loginForm.mobile"
+          placeholder="请输入用户名"
+          name="mobile"
+          type="text"
+          tabindex="1"
+          auto-complete="on"
+        />
       </el-form-item>
 
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
-        <el-input :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType" placeholder="请输入密码" name="password" tabindex="2" auto-complete="on" @keyup.enter.native="handleLogin" />
+        <el-input
+          :key="passwordType"
+          ref="password"
+          v-model="loginForm.password"
+          :type="passwordType"
+          placeholder="请输入密码"
+          name="password"
+          tabindex="2"
+          auto-complete="on"
+          @keyup.enter.native="handleLogin"
+        />
         <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          <svg-icon
+            :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
+          />
         </span>
       </el-form-item>
 
-      <el-button class="loginBtn" :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登 录</el-button>
+      <el-button
+        class="loginBtn"
+        :loading="loading"
+        type="primary"
+        style="width: 100%; margin-bottom: 30px"
+        @click.native.prevent="handleLogin"
+      >登 录</el-button>
 
       <div class="tips">
-        <span style="margin-right:20px;">账号: 13800000002</span>
+        <span style="margin-right: 20px">账号: 13800000002</span>
         <span> 密码: 123456</span>
       </div>
-
     </el-form>
   </div>
 </template>
@@ -99,9 +130,7 @@ export default {
           try {
             // 这里加 await 为了 token 获取完成后 再跳转
             await this.$store.dispatch('user/login', this.loginForm)
-            console.log(1111111)
             this.$router.push('/')
-            console.log(222222)
           } catch (error) {
             console.log('返回错误')
           }
