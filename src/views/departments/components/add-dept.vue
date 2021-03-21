@@ -1,6 +1,6 @@
 <template>
   <!-- 新增部门的弹层 -->
-  <el-dialog :title="title" :visible="showDialog">
+  <el-dialog :title="title" :visible="showDialog" @close="close">
     <el-form
       ref="fromRef"
       label-width="120px"
@@ -177,14 +177,16 @@ export default {
     // 编辑时 或者添加  获取 数据信息
     async showById(id, type) {
       this.type = type // 确定时 编辑 还是 新增
-      this.showDialog = true // 打开弹层
       if (this.type === 'edit') {
         this.title = '编辑部门'
+        // 根据id 获取 编辑部门信息
         this.formData = await getDepartDetail(id)
       } else {
         this.title = '新增部门'
+        // 获取的 部门id 作为 新添加部门的上级部门id
         this.formData.pid = id
       }
+      this.showDialog = true // 打开弹层
     },
     // 关闭弹层
     close() {
@@ -207,7 +209,6 @@ export default {
             await updateDepartments(this.formData)
           } else {
             // 调用新增接口 添加父部门的id
-            // 获取的 部门id 作为 新添加部门的上级部门id
             await addDepartments(this.formData)
           }
           this.$emit('delDepts')

@@ -11,6 +11,7 @@
                 icon="el-icon-plus"
                 size="small"
                 type="primary"
+                @click="addRole()"
               >新增角色</el-button>
             </el-row>
             <!-- 表格 -->
@@ -29,9 +30,19 @@
               />
               <el-table-column align="center" prop="description" label="描述" />
               <el-table-column align="center" label="操作">
-                <el-button size="small" type="success">分配权限</el-button>
-                <el-button size="small" type="primary">编辑</el-button>
-                <el-button size="small" type="danger">删除</el-button>
+                <template slot-scope="scope">
+                  <el-button size="small" type="success">分配权限</el-button>
+                  <el-button
+                    size="small"
+                    type="primary"
+                    @click="addRole(scope.row.id)"
+                  >编辑</el-button>
+                  <el-button
+                    size="small"
+                    type="danger"
+                    @click="deleteRole(scope.row.id)"
+                  >删除</el-button>
+                </template>
               </el-table-column>
             </el-table>
             <!-- 分页组件 -->
@@ -95,16 +106,21 @@
           </el-tab-pane>
         </el-tabs>
       </el-card>
+
+      <add-role ref="addRole" @update="getRoleList()" />
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { getRoleList, getCompanyInfo } from '@/api/setting'
+import { getRoleList, getCompanyInfo, deleteRole } from '@/api/setting'
+import addRole from './components/add-role'
 export default {
   name: 'Setting',
-  components: {},
+  components: {
+    addRole
+  },
   props: {},
   data() {
     return {
@@ -114,7 +130,8 @@ export default {
         page: 1,
         pagesize: 10
       },
-      total: 0 // 记录总数
+      total: 0, // 记录总数
+      formData: {} // 公司详情
     }
   },
   computed: {
@@ -135,11 +152,32 @@ export default {
       const { total, rows } = await getRoleList(this.params)
       this.total = total
       this.list = rows
+      console.log(rows)
     },
+    // newPage是当前点击的页码
     changePage(newPage) {
-      // newPage是当前点击的页码
       this.params.page = newPage // 将当前页码赋值给当前的最新页码
       this.getRoleList()
+    },
+    // 删除角色
+    async deleteRole(id) {
+      try {
+        await this.$confirm('确认删除该角色吗', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        await deleteRole(id) // 调用删除 接口
+        this.getRoleList() // 重新加载数据
+        this.$message.success('删除角色成功')
+      } catch (err) {
+        console.log(err)
+        this.$message.success('删除角色失败')
+      }
+    },
+    // 编辑 或 新增 角色
+    addRole(id) {
+      this.$refs.addRole.open(id)
     }
   }
 }
