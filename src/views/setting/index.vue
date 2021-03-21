@@ -177,6 +177,7 @@ export default {
     },
     // 编辑 或 新增 角色
     addRole(id) {
+      console.log(id)
       this.$refs.addRole.open(id)
     }
   }
