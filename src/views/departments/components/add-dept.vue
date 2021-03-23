@@ -1,27 +1,32 @@
 <template>
   <!-- 新增部门的弹层 -->
-  <el-dialog :title="title" :visible="showDialog" @close="close">
+  <el-dialog
+    :title="title"
+    :visible="showDialog"
+    :close-on-click-modal="false"
+    @close="close"
+  >
     <el-form
       ref="fromRef"
       label-width="120px"
       :model="formData"
       :rules="formRul"
     >
-      <el-form-item label="部门名称">
+      <el-form-item label="部门名称" prop="name">
         <el-input
           v-model="formData.name"
           style="width:80%"
           placeholder="1-50个字符"
         />
       </el-form-item>
-      <el-form-item label="部门编码">
+      <el-form-item label="部门编码" prop="code">
         <el-input
           v-model="formData.code"
           style="width:80%"
           placeholder="1-50个字符"
         />
       </el-form-item>
-      <el-form-item label="部门负责人">
+      <el-form-item label="部门负责人" prop="manager">
         <!-- 员工列表 获取光标时请求 获取最新列表 -->
         <el-select
           v-model="formData.manager"
@@ -37,7 +42,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="部门介绍">
+      <el-form-item label="部门介绍" prop="introduce">
         <el-input
           v-model="formData.introduce"
           style="width:80%"
@@ -81,7 +86,7 @@ export default {
         isRepeat = depts
           .filter(
             item =>
-              item.id !== this.formData.id && item.pid === this.treeNode.pid
+              item.id !== this.formData.id && item.pid === this.treeNode.id
           )
           .some(item => item.name === value)
       } else {
@@ -90,6 +95,7 @@ export default {
           .filter(item => item.pid === this.treeNode.id)
           .some(item => item.name === value)
       }
+      console.log(isRepeat)
       isRepeat
         ? callback(new Error(`同级部门下已经有${value}的部门了`))
         : callback()
@@ -164,7 +170,8 @@ export default {
       },
       peoples: [], // 员工简单列表
       title: '', // 标题
-      type: '' // 类型
+      type: '', // 类型
+      treeNode: {} // 传入的节点
     }
   },
   created() {},
@@ -175,16 +182,17 @@ export default {
       this.peoples = await getEmployeeSimple()
     },
     // 编辑时 或者添加  获取 数据信息
-    async showById(id, type) {
+    async showById(node, type) {
       this.type = type // 确定时 编辑 还是 新增
+      this.treeNode = node // 传入的节点
       if (this.type === 'edit') {
         this.title = '编辑部门'
         // 根据id 获取 编辑部门信息
-        this.formData = await getDepartDetail(id)
+        this.formData = await getDepartDetail(node.id)
       } else {
         this.title = '新增部门'
         // 获取的 部门id 作为 新添加部门的上级部门id
-        this.formData.pid = id
+        this.formData.pid = node.id
       }
       this.showDialog = true // 打开弹层
     },

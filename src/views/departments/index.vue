@@ -3,7 +3,11 @@
     <div class="app-container">
       <el-card class="tree-card">
         <!-- 用了一个行列布局 -->
-        <tree-tools :tree-node="company" :is-root="true" />
+        <tree-tools
+          :tree-node="company"
+          :is-root="true"
+          @addDepts="addDepartments($event)"
+        />
         <!-- 树形图 -->
         <el-tree
           :data="departs"
@@ -35,7 +39,7 @@
 import treeTools from './components/tree-tools'
 import addDept from './components/add-dept'
 import { getDepartments } from '@/api/departments'
-import { tranListToTreeData } from '@/utils/index'
+import { tranListToTreeData } from '@/utils'
 export default {
   name: 'Departments',
   components: {
@@ -70,7 +74,7 @@ export default {
     },
     // 添加 或 编辑 部门
     addDepartments(obj) {
-      this.$refs.show.showById(obj.node.id, obj.type)
+      this.$refs.show.showById(obj.node, obj.type)
     }
   }
 }

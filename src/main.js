@@ -17,6 +17,16 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // 引入token管理 路由守卫
 
+import Component from '@/components' // 引用
+Vue.use(Component) // 注册自己的插件
+
+import * as filters from '@/filters' // 引入工具类
+// 注册全局的过滤器
+Object.keys(filters).forEach(key => {
+  // 注册过滤器
+  Vue.filter(key, filters[key])
+})
+
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明

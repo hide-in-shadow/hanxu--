@@ -1,5 +1,10 @@
 <template>
-  <el-dialog :title="title" :visible="showDialog" @close="close">
+  <el-dialog
+    :title="title"
+    :visible="showDialog"
+    :close-on-click-modal="false"
+    @close="close"
+  >
     <el-form
       ref="roleFormRef"
       :model="roleForm"
