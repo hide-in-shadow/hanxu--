@@ -12,9 +12,9 @@
       :model="formData"
       :rules="formDataRul"
     >
-      <el-form-item label="姓名" prop="name">
+      <el-form-item label="姓名" prop="username">
         <el-input
-          v-model="formData.name"
+          v-model="formData.username"
           style="width:50%"
           placeholder="请输入姓名"
         />
@@ -38,7 +38,13 @@
           v-model="formData.formOfEmployment"
           style="width:50%"
           placeholder="请选择"
+        ><el-option
+          v-for="item in EmployeeEnum.hireType"
+          :key="item.id"
+          :label="item.value"
+          :value="item.id"
         />
+        </el-select>
       </el-form-item>
       <el-form-item label="工号" prop="workNumber">
         <el-input
@@ -56,7 +62,9 @@
         />
         <!-- 放置一个tree组件 -->
         <el-tree
+          v-if="showTree"
           v-loading="loading"
+          class="tree"
           :data="treeData"
           default-expand-all
           :props="{ label: 'name' }"
@@ -85,14 +93,16 @@
 
 <script>
 import { getDepartments } from '@/api/departments'
+import { addEmployee } from '@/api/employees'
 import { tranListToTreeData } from '@/utils'
+import EmployeeEnum from '@/api/constant/employees'
 export default {
   components: {},
   props: {},
   data() {
     return {
       showTree: false, // 是否展示部门选择框
-      treeData: {}, // 树形结构的数据
+      treeData: [], // 树形结构的数据
       loading: false,
       showDialog: false,
       formData: {
@@ -137,6 +147,11 @@ export default {
       }
     }
   },
+  computed: {
+    EmployeeEnum() {
+      return EmployeeEnum
+    }
+  },
   created() {},
   mounted() {},
   methods: {
@@ -175,10 +190,29 @@ export default {
     },
     // 确定提交表单
     add() {
-      this.open()
+      this.$refs.formRef.validate(async isOK => {
+        if (isOK) {
+          // 调用新增接口
+          await addEmployee(this.formData) // 新增员工
+          this.$parent.getEmployeeList() // 调用父组件方法
+          this.close()
+        }
+      })
     }
   }
 }
 </script>
 
-<style></style>
+<style scoped lang="scss">
+.tree {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  z-index: 999;
+  border: 1px solid #dddee1;
+  left: 0;
+  border-radius: 5px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+</style>

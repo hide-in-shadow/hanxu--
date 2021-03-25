@@ -15,7 +15,14 @@ export default {
         title: '员工', // 用title 因为左侧导航会读取meta里的title作为菜单名
         icon: 'people'
       }
+    },
+    {
+      path: 'detail/:id', // query传参 动态路由传参
+      component: () => import('@/views/employees/detail'),
+      hidden: true, // 不在左侧菜单显示
+      meta: {
+        title: '员工详情' // 标记当前路由规则的中文名称 后续在做左侧菜单时 使用
+      }
     }
   ]
 }
-// 当你的访问地址 是 /employees的时候 layout组件会显示 此时 你的二级路由的默认组件  也会显示

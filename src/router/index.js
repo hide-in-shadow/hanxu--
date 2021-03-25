@@ -15,6 +15,8 @@ import attendancesRouter from './modules/attendances'
 import approvalsRouter from './modules/approvals'
 import salarysRouter from './modules/salarys'
 
+import usersRouter from './modules/user'
+
 // 动态路由
 export const asyncRoutes = [
   departmentsRouter, // 组织架构
@@ -58,6 +60,18 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/import',
+    component: Layout,
+    hidden: true, // 隐藏在左侧菜单中
+    children: [
+      {
+        path: '', // 二级路由path什么都不写 表示二级默认路由
+        component: () => import('@/views/import')
+      }
+    ]
+  },
+  usersRouter, // 用户详情路由
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

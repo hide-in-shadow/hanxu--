@@ -152,7 +152,7 @@ export default {
       const { total, rows } = await getRoleList(this.params)
       this.total = total
       this.list = rows
-      console.log(rows)
+      // console.log(rows)
     },
     // newPage是当前点击的页码
     changePage(newPage) {
@@ -162,11 +162,7 @@ export default {
     // 删除角色
     async deleteRole(id) {
       try {
-        await this.$confirm('确认删除该角色吗', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
+        await this.$confirm('确认删除该角色吗')
         await deleteRole(id) // 调用删除 接口
         this.getRoleList() // 重新加载数据
         this.$message.success('删除角色成功')
@@ -177,7 +173,6 @@ export default {
     },
     // 编辑 或 新增 角色
     addRole(id) {
-      console.log(id)
       this.$refs.addRole.open(id)
     }
   }

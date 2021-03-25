@@ -59,11 +59,7 @@ export default {
         this.$emit('addDepts', { node: this.treeNode, type })
       } else {
         //  删除操作
-        this.$confirm('确定要删除该部门吗', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
+        this.$confirm('确定要删除该部门吗')
           .then(() => {
             // 如果点击了确定就会进入then
             return delDepartments(this.treeNode.id) // 返回promise对象

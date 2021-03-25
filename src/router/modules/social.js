@@ -1,19 +1,47 @@
 import Layout from '@/layout'
-//  {  path: '', component: '' }
-// 每个子模块 其实 都是外层是layout  组件位于layout的二级路由里面
+
 export default {
-  path: '/social', // 路径
-  // name: 'social', // 给路由规则加一个name
-  component: Layout, // 组件
-  // 配置二级路的路由表
+  path: '/social_securitys',
+  component: Layout,
+  // name: 'social_securitys',
   children: [
     {
-      path: '', // path: ""  表示该路由为当前二级路由的默认路由
+      path: '',
       component: () => import('@/views/social'),
+      name: 'social_securitys',
       meta: {
-        // meta里的属性 随意定义
-        title: '社保', // 用title 因为左侧导航会读取meta里的title作为菜单名
+        title: '社保',
         icon: 'table'
+      }
+    },
+    // 报表
+    {
+      path: 'detail/:id',
+      hidden: true,
+      component: () => import('@/views/social/detail'),
+      name: 'socialDetail',
+      meta: {
+        title: '社保'
+      }
+    },
+    // 历史归档
+    {
+      path: 'historicalArchiving',
+      hidden: true,
+      component: () => import('@/views/social/historical'),
+      name: 'socialHistorical',
+      meta: {
+        title: '历史归档'
+      }
+    },
+    // 月报表
+    {
+      path: 'monthStatement',
+      component: () => import('@/views/social/month'),
+      name: 'socialMonthStatement',
+      hidden: true,
+      meta: {
+        title: '当月报表'
       }
     }
   ]

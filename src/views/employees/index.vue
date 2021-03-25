@@ -4,9 +4,17 @@
       <page-tools :show-before="true">
         <span slot="before">共{{ total }}条记录</span>
         <template slot="after">
-          <el-button size="small" type="warning">导入</el-button>
+          <el-button
+            size="small"
+            type="warning"
+            @click="$router.push('/import?type=user')"
+          >导入</el-button>
           <el-button size="small" type="danger">导出</el-button>
-          <el-button size="small" type="primary">新增员工</el-button>
+          <el-button
+            size="small"
+            type="primary"
+            @click="addEmployee()"
+          >新增员工</el-button>
         </template>
       </page-tools>
       <!-- 放置表格和分页 -->
@@ -34,7 +42,11 @@
           </el-table-column>
           <el-table-column label="操作" sortable fixed="right" width="240">
             <template slot-scope="{ row }">
-              <el-button type="text" size="small">查看</el-button>
+              <el-button
+                type="text"
+                size="small"
+                @click="$router.push(`/employees/detail/${row.id}`)"
+              >查看</el-button>
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
@@ -64,8 +76,8 @@
         </el-row>
       </el-card>
 
-      <!-- 新增部门 -->
-      <add-employee />
+      <!-- 新增员工 -->
+      <add-employee ref="addEmployee" />
     </div>
   </div>
 </template>
@@ -104,7 +116,6 @@ export default {
     async getEmployeeList() {
       this.loading = true
       const { total, rows } = await getEmployeeList(this.params)
-      console.log(rows)
       this.total = total
       this.list = rows
       this.loading = false
@@ -121,11 +132,7 @@ export default {
     // 删除 员工
     async deleteEmployee(id) {
       try {
-        await this.$confirm('您确定删除该员工吗', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
+        await this.$confirm('您确定删除该员工吗')
         await delEmployee(id)
         this.getEmployeeList()
         this.$message.success('删除员工成功')
@@ -133,9 +140,13 @@ export default {
         console.log(err)
         this.$message.success('删除员工失败')
       }
+    },
+    // 新增员工
+    addEmployee() {
+      this.$refs.addEmployee.open()
     }
   }
 }
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="scss"></style>
