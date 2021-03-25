@@ -7,9 +7,13 @@
           <el-button
             size="small"
             type="warning"
-            @click="$router.push('/import?type=user')"
-          >导入</el-button>
-          <el-button size="small" type="danger">导出</el-button>
+            @click="$router.push('/import')"
+          >Excel 导入</el-button>
+          <el-button
+            size="small"
+            type="danger"
+            @click="exportExcel"
+          >Excel 导出</el-button>
           <el-button
             size="small"
             type="primary"
@@ -86,6 +90,7 @@
 import { getEmployeeList, delEmployee } from '@/api/employees'
 import EmployeeEnum from '@/api/constant/employees' // 枚举文件
 import AddEmployee from './components/add-employee'
+import { formatDate } from '@/filters'
 export default {
   name: 'Employees',
   components: {
@@ -144,6 +149,58 @@ export default {
     // 新增员工
     addEmployee() {
       this.$refs.addEmployee.open()
+    },
+    // 导出 excel 文件
+    exportExcel() {
+      const headers = {
+        姓名: 'username',
+        手机号: 'mobile',
+        入职日期: 'timeOfEntry',
+        聘用形式: 'formOfEmployment',
+        转正日期: 'correctionTime',
+        工号: 'workNumber',
+        部门: 'departmentName'
+      }
+      // Object.keys(obj) 会将 对象的key值 转成数组
+      // console.log(Object.keys(headers))
+      import('@/vendor/Export2Excel').then(async excel => {
+        const { rows } = await getEmployeeList({ page: 1, size: this.total })
+        const data = this.formatJson(headers, rows)
+        const multiHeader = [['姓名', '主要信息', '', '', '', '', '部门']]
+        const merges = ['A1:A2', 'B1:F1', 'G1:G2']
+        excel.export_json_to_excel({
+          header: Object.keys(headers), // 表头 必填 数组
+          multiHeader, // 复杂表头 [[], []] 数组包数组
+          merges, // 需要合并选项 数组
+          data, // 具体数据 必填  [[], []] 数组包数组
+          filename: 'excel-list', // 文件名
+          autoWidth: true, // 单元格是否要自适应宽度 默认true
+          bookType: 'xlsx' // 导出文件类型 xlsx, csv, txt等 默认xlsx
+        })
+      })
+    },
+    // 将数组对象 处理成 二维数组
+    formatJson(headers, rows) {
+      // item => {'key': 'value','key': 'value','key': 'value'}
+      return rows.map(item => {
+        // Object.keys(headers) => ['key', 'key', 'key']
+        return Object.keys(headers).map(key => {
+          // 入职日期 转正日期 转化时间
+          if (
+            headers[key] === 'timeOfEntry' ||
+            headers[key] === 'correctionTime'
+          ) {
+            return formatDate(item[headers[key]])
+          } else if (headers[key] === 'formOfEmployment') {
+            // 聘用形式 转换 相应的 内容
+            var en = EmployeeEnum.hireType.find(
+              obj => obj.id === item[headers[key]]
+            )
+            return en ? en.value : '未知'
+          }
+          return item[headers[key]] // item的key 是 headers的值
+        }) // => ["张三", "13811"，"2018","1", "2018", "10002"]
+      })
     }
   }
 }

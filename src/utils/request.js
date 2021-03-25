@@ -70,7 +70,8 @@ service.interceptors.response.use(
   error => {
     console.log(error)
     Message.error(error.message) // 提示错误信息
-    return Promise.reject(error) // 返回执行错误 直接进入 catch
+    // router.push('/login') // 跳转到登录页
+    return router.push('/login') // 返回执行错误 直接进入 登录页
   }
 )
 

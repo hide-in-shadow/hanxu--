@@ -44,6 +44,7 @@ module.exports = {
       // 本地的前端  => 另外一个服务器发请求 （跨域 行不通）
       '/api': {
         target: 'http://ihrm-java.itheima.net/', // 跨域请求的地址
+        // target: 'http://192.168.88.71:3001', // 跨域请求的地址
         changeOrigin: true // 是否跨域 需要设置此值为true  才表示开启跨域
         // 路径重写
         // pathRewrite: {
