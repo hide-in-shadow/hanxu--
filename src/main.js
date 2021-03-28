@@ -20,6 +20,9 @@ import '@/permission' // 引入token管理 路由守卫
 import Component from '@/components' // 引用
 Vue.use(Component) // 注册自己的插件
 
+import Print from 'vue-print-nb'
+Vue.use(Print) // 注册打印插件
+
 import * as filters from '@/filters' // 引入工具类
 // 注册全局的过滤器
 Object.keys(filters).forEach(key => {

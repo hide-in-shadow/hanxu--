@@ -25,8 +25,24 @@
       <el-card v-loading="loading">
         <el-table border :data="list">
           <el-table-column label="序号" type="index" width="50" />
-          <el-table-column label="姓名" sortable prop="username" />
-          <el-table-column label="工号" sortable prop="workNumber" />
+          <el-table-column label="姓名" sortable prop="username" width="100" />
+          <el-table-column
+            label="工号"
+            sortable
+            prop="workNumber"
+            width="100"
+          />
+          <el-table-column label="头像" align="center">
+            <template slot-scope="{ row }">
+              <img
+                slot="reference"
+                v-imageerror="require('@/assets/common/img.jpeg')"
+                :src="row.staffPhoto"
+                style="border-radius: 50%; width: 100px; height: 100px; padding: 10px"
+                @click="showQrCode(row.staffPhoto)"
+              >
+            </template>
+          </el-table-column>
           <el-table-column
             label="聘用形式"
             sortable
@@ -54,7 +70,11 @@
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
-              <el-button type="text" size="small">角色</el-button>
+              <el-button
+                type="text"
+                size="small"
+                @click="update(row.id)"
+              >角色</el-button>
               <el-button
                 type="text"
                 size="small"
@@ -80,8 +100,22 @@
         </el-row>
       </el-card>
 
+      <!-- 二维码弹层 -->
+      <el-dialog
+        title="二维码"
+        :visible.sync="showCodeDialog"
+        @close="imgUrl = ''"
+      >
+        <el-row type="flex" justify="center">
+          <canvas ref="myCanvas" />
+        </el-row>
+      </el-dialog>
+
       <!-- 新增员工 -->
       <add-employee ref="addEmployee" />
+
+      <!-- 角色弹层 -->
+      <assign-role ref="assignRole" />
     </div>
   </div>
 </template>
@@ -90,11 +124,14 @@
 import { getEmployeeList, delEmployee } from '@/api/employees'
 import EmployeeEnum from '@/api/constant/employees' // 枚举文件
 import AddEmployee from './components/add-employee'
+import AssignRole from './components/assign-role'
 import { formatDate } from '@/filters'
+import QrCode from 'qrcode'
 export default {
   name: 'Employees',
   components: {
-    AddEmployee
+    AddEmployee,
+    AssignRole
   },
   props: {},
   data() {
@@ -105,7 +142,8 @@ export default {
         page: 1, // 当前页码
         size: 10 // 每页展示条数
       },
-      total: 0 // 总数
+      total: 0, // 总数
+      showCodeDialog: false // 控制二维码弹层
     }
   },
   created() {
@@ -201,6 +239,22 @@ export default {
           return item[headers[key]] // item的key 是 headers的值
         }) // => ["张三", "13811"，"2018","1", "2018", "10002"]
       })
+    },
+    // 点击头像 预览 二维码
+    showQrCode(url) {
+      if (url) {
+        this.showCodeDialog = true
+        this.$nextTick(() => {
+          // 组件渲染完成后才能获取 ref
+          QrCode.toCanvas(this.$refs.myCanvas, url) // 将地址转化成二维码
+        })
+      } else {
+        this.$message.warning('该用户还未上传头像')
+      }
+    },
+    // 用户角色弹窗
+    update(id) {
+      this.$refs.assignRole.open(id)
     }
   }
 }

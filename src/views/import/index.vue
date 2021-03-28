@@ -4,12 +4,9 @@
 </template>
 
 <script>
-import UploadExcel from '@/components/UploadExcel'
 import { importEmployee } from '@/api/employees'
 export default {
-  components: {
-    UploadExcel
-  },
+  components: {},
   props: {},
   data() {
     return {}

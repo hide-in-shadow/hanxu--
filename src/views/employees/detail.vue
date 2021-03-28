@@ -30,12 +30,28 @@
           </el-tab-pane>
 
           <el-tab-pane label="个人详情">
+            <!-- 打印按钮 -->
+            <el-row type="flex" justify="end">
+              <el-tooltip content="打印个人基本信息">
+                <router-link :to="`/employees/print/${userId}?type=personal`">
+                  <i class="el-icon-printer" />
+                </router-link>
+              </el-tooltip>
+            </el-row>
             <!-- 放置个人详情 -->
-            <!-- <component :is="userComponent" /> -->
-            <user-info />
+            <component :is="userComponent" />
+            <!-- <user-info /> -->
           </el-tab-pane>
 
           <el-tab-pane label="岗位信息">
+            <!-- 打印按钮 -->
+            <el-row type="flex" justify="end">
+              <el-tooltip content="打印岗位信息">
+                <router-link :to="`/employees/print/${userId}?type=job`">
+                  <i class="el-icon-printer" />
+                </router-link>
+              </el-tooltip>
+            </el-row>
             <!-- 放置岗位详情 -->
             <job-info />
           </el-tab-pane>
@@ -55,6 +71,7 @@ export default {
   props: {},
   data() {
     return {
+      userComponent: 'userInfo', // 动态组件名 用于 component :is
       userId: this.$route.params.id, // 直接通过 this.userId进行获取数据
       userInfo: {
         username: '',
