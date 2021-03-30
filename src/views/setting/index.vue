@@ -31,7 +31,11 @@
               <el-table-column align="center" prop="description" label="描述" />
               <el-table-column align="center" label="操作">
                 <template slot-scope="scope">
-                  <el-button size="small" type="success">分配权限</el-button>
+                  <el-button
+                    size="small"
+                    type="success"
+                    @click="addRolePermission(scope.row.id)"
+                  >分配权限</el-button>
                   <el-button
                     size="small"
                     type="primary"
@@ -108,6 +112,7 @@
       </el-card>
 
       <add-role ref="addRole" @update="getRoleList()" />
+      <add-role-permission ref="addRolePermission" />
     </div>
   </div>
 </template>
@@ -116,10 +121,12 @@
 import { mapGetters } from 'vuex'
 import { getRoleList, getCompanyInfo, deleteRole } from '@/api/setting'
 import addRole from './components/add-role'
+import addRolePermission from './components/add-role-permission'
 export default {
   name: 'Setting',
   components: {
-    addRole
+    addRole,
+    addRolePermission
   },
   props: {},
   data() {
@@ -174,6 +181,10 @@ export default {
     // 编辑 或 新增 角色
     addRole(id) {
       this.$refs.addRole.open(id)
+    },
+    // 分配权限
+    addRolePermission(id) {
+      this.$refs.addRolePermission.open(id)
     }
   }
 }

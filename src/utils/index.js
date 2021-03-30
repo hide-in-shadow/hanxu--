@@ -8,7 +8,6 @@
  *  rootValue 表示 子节点的属性名 ''表示是根节点 找到跟节点后再次调用 找子节点
  * ***/
 export function tranListToTreeData(list, rootValue) {
-  debugger
   var arr = []
   list.forEach(item => {
     if (item.pid === rootValue) {

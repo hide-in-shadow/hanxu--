@@ -181,7 +181,7 @@ export default {
         this.$message.success('删除员工成功')
       } catch (err) {
         console.log(err)
-        this.$message.success('删除员工失败')
+        this.$message('删除员工失败')
       }
     },
     // 新增员工
