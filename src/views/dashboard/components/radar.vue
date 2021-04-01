@@ -22,7 +22,7 @@ export default {
       legend: {},
       radar: {
         // shape: 'circle',
-        name: {
+        axisName: {
           textStyle: {
             color: '#fff',
             backgroundColor: '#999',

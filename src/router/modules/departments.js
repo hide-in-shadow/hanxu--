@@ -3,12 +3,12 @@ import Layout from '@/layout'
 // 每个子模块 其实 都是外层是layout  组件位于layout的二级路由里面
 export default {
   path: '/departments', // 路径
-  name: 'departments', // 给路由规则加一个name
+  name: 'departments',
   component: Layout, // 组件
-  // 配置二级路的路由表
   children: [
     {
-      path: '', // path: ""  表示该路由为当前二级路由的默认路由
+      path: '',
+      name: 'departments',
       component: () => import('@/views/departments'),
       meta: {
         // meta里的属性 随意定义

@@ -9,6 +9,7 @@ export default {
   children: [
     {
       path: '', // path: ""  表示该路由为当前二级路由的默认路由
+      name: 'permissions', // 给路由规则加一个name
       component: () => import('@/views/permission'),
       meta: {
         // meta里的属性 随意定义

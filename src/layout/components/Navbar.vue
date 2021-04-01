@@ -1,6 +1,10 @@
 <template>
   <div class="navbar">
-    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <hamburger
+      :is-active="sidebar.opened"
+      class="hamburger-container"
+      @toggleClick="toggleSideBar"
+    />
 
     <div class="app-breadcrumb">
       江苏传智播客教育科技股份有限公司
@@ -9,9 +13,19 @@
     <!-- <breadcrumb class="breadcrumb-container" /> -->
 
     <div class="right-menu">
+      <!-- 放置切换多语言 -->
+      <lang class="right-menu-item" />
+      <!-- 放置全屏组件 -->
+      <screen-full class="right-menu-item" />
+      <!-- 放置动态主题组件 -->
+      <theme-picker class="right-menu-item" />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img v-imageerror="defaultImg" :src="staffPhoto" class="user-avatar">
+          <img
+            v-imageerror="defaultImg"
+            :src="staffPhoto"
+            class="user-avatar"
+          >
           <span class="name">{{ name }}</span>
           <i class="el-icon-arrow-down el-icon--right" style="color:#fff" />
         </div>
@@ -111,11 +125,12 @@ export default {
 
     .right-menu-item {
       display: inline-block;
-      padding: 0 8px;
-      height: 100%;
+      padding-right: 20px;
+      height: unset;
       font-size: 18px;
       color: #5a5e66;
-      vertical-align: text-bottom;
+      vertical-align: middle;
+      margin-top: 5px;
 
       &.hover-effect {
         cursor: pointer;
@@ -131,7 +146,6 @@ export default {
       margin-right: 30px;
 
       .avatar-wrapper {
-        margin-top: 5px;
         position: relative;
 
         .user-avatar {
