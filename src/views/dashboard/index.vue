@@ -87,7 +87,7 @@
             <span>流程申请</span>
           </div>
           <div class="sideNav">
-            <el-button class="sideBtn">加班离职</el-button>
+            <el-button class="sideBtn" @click="lizhi()">加班离职</el-button>
             <el-button class="sideBtn">请假调休</el-button>
             <el-button
               class="sideBtn"
@@ -106,6 +106,7 @@
             <span>绩效指数</span>
           </div>
           <!-- 放置雷达图 -->
+          <Radar />
         </el-card>
         <!-- 帮助连接 -->
         <el-card class="box-card">
@@ -137,16 +138,23 @@
         </el-card>
       </el-col>
     </el-row>
+
+    <!-- 离职弹窗 -->
+    <lizhi ref="lizhi" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import workCalendar from './components/work-calendar'
+import Radar from './components/radar'
+import lizhi from './components/lizhi'
 export default {
   name: 'Dashboard',
   components: {
-    workCalendar
+    workCalendar,
+    Radar,
+    lizhi
   },
   data() {
     return {
@@ -155,6 +163,11 @@ export default {
   },
   computed: {
     ...mapGetters(['userInfo'])
+  },
+  methods: {
+    lizhi() {
+      this.$refs.lizhi.open()
+    }
   }
 }
 </script>

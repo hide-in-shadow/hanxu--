@@ -28,6 +28,7 @@
     <el-calendar v-model="currentDate">
       <template v-slot:dateCell="{ date, data }" class="content">
         <div class="date-content">
+          <!-- date 是当前单元格的日期  data是一个对象 -->
           <span class="text"> {{ data.day | getDay }}</span>
           <span v-if="isWeek(date)" class="rest">休</span>
         </div>
@@ -55,16 +56,17 @@ export default {
     return {
       currentMonth: null, // 当前月份
       currentYear: null, // 当前年份
-      currentDate: null, // 当前日期
+      currentDate: null, // 当前详细日期
       yearList: []
     }
   },
   created() {
-    // 处理起始时间
     // 组件要求起始时间必须是 周一开始 以一个月为开始
     this.currentMonth = this.startDate.getMonth() + 1
     this.currentYear = this.startDate.getFullYear()
     // 根据当前的年 生成可选年份 前后各加5年
+    // Array(11) 代表数组有11个位置
+    // Array.from(array, fn)
     this.yearList = Array.from(
       Array(11),
       (value, index) => this.currentYear + index - 5
@@ -77,7 +79,7 @@ export default {
     isWeek(value) {
       return value.getDay() === 6 || value.getDay() === 0
     },
-    // 年月份改变之后
+    // 年月份改变之后 的 当前日期
     dateChange() {
       const year = this.currentYear
       const month = this.currentMonth
