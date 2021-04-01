@@ -63,6 +63,7 @@
           <el-table-column label="操作" sortable fixed="right" width="240">
             <template slot-scope="{ row }">
               <el-button
+                :disabled="!checkPermission('POINT-USER-UPDATE')"
                 type="text"
                 size="small"
                 @click="$router.push(`/employees/detail/${row.id}`)"

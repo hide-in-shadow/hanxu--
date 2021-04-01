@@ -4,12 +4,11 @@ export default {
   path: '/users',
   component: Layout,
   hidden: true,
-  // name: 'user',
+  name: 'user12345',
   children: [
     {
       path: '/users/approvals',
       component: () => import('@/views/users/approvals'),
-      name: 'usersApprovals',
       hidden: true,
       meta: {
         title: '用户'

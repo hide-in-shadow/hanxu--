@@ -31,6 +31,7 @@
             <span>工作日历</span>
           </div>
           <!-- 放置日历组件 -->
+          <work-calendar />
         </el-card>
         <!-- 公告 -->
         <el-card class="box-card">
@@ -141,8 +142,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import workCalendar from './components/work-calendar'
 export default {
   name: 'Dashboard',
+  components: {
+    workCalendar
+  },
   data() {
     return {
       defaultImg: require('@/assets/common/head.jpg')

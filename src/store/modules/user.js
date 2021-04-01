@@ -1,5 +1,7 @@
 import { getToken, setToken, removeToken, setTimeStamp } from '@/utils/auth'
 import { login, getUserInfo, getUserDetailById } from '@/api/user'
+// 引入router 重置路由方法
+import { resetRouter } from '@/router'
 
 // 状态
 const state = {
@@ -50,6 +52,11 @@ const actions = {
   logout(context) {
     context.commit('removeToken') // 删除token
     context.commit('removeUserInfo') // 删除用户信息资料
+    // 重置路由
+    resetRouter()
+    // 要清空permission模块下的state数据
+    context.commit('permission/setRoutes', [], { root: true })
+    // 子模块调用子模块的action 可以 将 commit的第三个参数 设置成  { root: true } 就表示当前的context不是子模块了 而是父模块
   }
 }
 

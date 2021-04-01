@@ -11,17 +11,30 @@ router.beforeEach(async(to, from, next) => {
   NProgress.start() // 开启进度条
   //  首先判断有无token
   if (store.getters.token) {
-    if (!store.getters.userId) {
-      // 如果没有id这个值 才会调用 vuex的获取资料的action
-      await store.dispatch('user/getUserInfo')
-      // 写await 因为我们想获取完资料再去放行
-    }
-    //   如果有token 继续判断是不是去登录页
+    //   如果有token 判断是不是去登录页
     if (to.path === '/login') {
-      //  表示去的是登录页
-      next('/') // 跳到主页
+      next('/') // 去的是登录页 跳到主页
     } else {
-      next() // 直接放行
+      // 判断有没有用户id vuex的获取资料的action
+      if (!store.getters.userId) {
+        // 写await 因为我们想获取完资料再去放行
+        const { roles } = await store.dispatch('user/getUserInfo')
+        // 根据获取的 用户信息 的权限信息
+        const routes = await store.dispatch(
+          'permission/filterRoutes',
+          roles.menus
+        )
+        // 添加动态路由到路由表 设置左侧导航栏  铺路
+        // 404页面需添加在 所有路由的 最后
+        router.addRoutes([
+          ...routes,
+          { path: '*', redirect: '/404', hidden: true }
+        ])
+        // addRoutes使用后需要重新导向 即再次跳转原地址
+        next(to.path) // to.path 指向原本应该跳转的地址
+      } else {
+        next() // 直接放行
+      }
     }
   } else {
     // 如果没有token

@@ -6,6 +6,7 @@
       :data="permData"
       :props="defaultProps"
       :show-checkbox="true"
+      :check-strictly="true"
       :default-expand-all="true"
       :default-checked-keys="selectCheck"
       node-key="id"

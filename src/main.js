@@ -14,6 +14,9 @@ import App from './App'
 import store from './store'
 import router from './router'
 
+import checkPermission from '@/mixin/checkPermission'
+Vue.mixin(checkPermission) // 全局混入 方法
+
 import '@/icons' // icon
 import '@/permission' // 引入token管理 路由守卫
 

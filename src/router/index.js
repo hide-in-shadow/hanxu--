@@ -81,14 +81,15 @@ const createRouter = () =>
   new Router({
     // mode: 'history', // require service support
     scrollBehavior: () => ({ y: 0 }),
-    routes: [...constantRoutes, ...asyncRoutes]
+    routes: [...constantRoutes]
   })
 
 const router = createRouter()
 
+// 重置初始路由可匹配路径 重新实例化一个路由
 export function resetRouter() {
   const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
+  router.matcher = newRouter.matcher // 重新设置路由的可匹配路径
 }
 
 export default router
